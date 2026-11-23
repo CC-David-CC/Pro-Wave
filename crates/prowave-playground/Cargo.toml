@@ -1,0 +1,14 @@
+# Playground's browser build of Pro Wave (patches/logic-pro.yaml in github.com/daijro/openplayground): std's clock,
+# files and threads as wasm32-unknown-unknown can have them. Native builds compile it empty.
+[package]
+name = "prowave-playground"
+version = "0.1.0"
+edition = "2021"
+description = "Pro Wave in the browser: the clock, files and threads std lacks on wasm32-unknown-unknown"
+license = "GPL-3.0-or-later"
+publish = false
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+web-time = "1"
+# A file here is a source symphonia decodes, as std's File is (crates/prowave-engine). Keep in step with it.
+symphonia-core = "0.5"

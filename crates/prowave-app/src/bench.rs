@@ -506,3 +506,6 @@ mod tests {
         assert!(!crate::engine_sync::offline_song(&p).notes.is_empty());
     }
 }
+
+// Playground's browser build: the clock (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;

@@ -109,3 +109,6 @@ pub fn import_audio(p: &mut Project, path: &Path, ctx: &egui::Context) -> Result
     p.song_rev += 1;
     Ok(())
 }
+
+// Playground's browser build: the waveform worked out in place (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;

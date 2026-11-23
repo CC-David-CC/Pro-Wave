@@ -1045,3 +1045,5 @@ impl Drop for ClapBackend {
         }
     }
 }
+
+#[cfg(target_arch = "wasm32")] use crate::wasm_libloading as libloading;

@@ -1134,3 +1134,18 @@ mod memory_tests {
         assert_eq!(info.parameters[0].max, 12.0);
     }
 }
+
+// Playground's browser build: no native libraries (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")]
+mod libloading {
+    pub struct Library;
+    pub struct Symbol<T>(core::convert::Infallible, core::marker::PhantomData<T>);
+    impl<T> core::ops::Deref for Symbol<T> {
+        type Target = T;
+        fn deref(&self) -> &T { match self.0 {} }
+    }
+    impl Library {
+        pub unsafe fn new<P>(_: P) -> Result<Library, String> { Err("no native libraries on the web".to_string()) }
+        pub unsafe fn get<T>(&self, _: &[u8]) -> Result<Symbol<T>, String> { Err("no native libraries on the web".to_string()) }
+    }
+}

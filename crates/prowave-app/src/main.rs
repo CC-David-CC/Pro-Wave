@@ -1634,6 +1634,7 @@ fn start_midi_out(sync: &mut engine_sync::EngineSync) -> Option<midi_out::MidiOu
 /// Log to stderr; `RUST_LOG` overrides the default (warnings, plus info from ProWave; the
 /// Vulkan loader's harmless layer-manifest warnings from `wgpu_hal` are hidden).
 fn init_logging() {
+    #[cfg(target_arch = "wasm32")] return;
     let filter = tracing_subscriber::EnvFilter::try_from_default_env()
         .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("warn,wgpu_hal=error,prowave=info"));
     tracing_subscriber::fmt().with_env_filter(filter).init();
@@ -2307,3 +2308,10 @@ mod tests {
         assert_eq!(icon.rgba.len(), 256 * 256 * 4);
     }
 }
+
+// Playground's browser build: the clock (MIDI time code), the files and the temp folder (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;
+
+// Playground's browser build (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] mod web;
+#[cfg(target_arch = "wasm32")] use web::{eframe, rfd};

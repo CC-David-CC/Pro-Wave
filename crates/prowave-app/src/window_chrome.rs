@@ -10,7 +10,7 @@ use egui::viewport::ResizeDirection;
 use egui::{pos2, vec2, Color32, CursorIcon, Pos2, Rect, Sense, Stroke, ViewportCommand};
 
 /// Whether Pro Wave draws its own window controls (everywhere but macOS).
-pub const CUSTOM: bool = !cfg!(target_os = "macos");
+pub const CUSTOM: bool = !cfg!(target_os = "macos") && !cfg!(target_arch = "wasm32");
 
 /// Width of each window button and of the grab zone along the window's edges.
 const BUTTON_W: f32 = 40.0;

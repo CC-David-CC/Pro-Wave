@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Pro Wave</title>
+  <!-- Pro Wave in the browser, for Playground (patches/logic-pro.yaml in github.com/daijro/openplayground). -->
+  <link data-trunk rel="rust" href="crates/prowave-app/Cargo.toml" data-bin="prowave" data-wasm-opt="0" />
+  <link data-trunk rel="icon" href="crates/prowave-app/assets/icon-256.png" />
+  <link data-trunk rel="copy-file" href="web/canvas.css" />
+  <link data-trunk rel="copy-file" href="web/startup.mjs" />
+  <link rel="stylesheet" href="./canvas.css" />
+  <script type="module" src="./startup.mjs"></script>
+</head>
+<body>
+  <canvas id="prowave_canvas"></canvas>
+  <div id="prowave_loading">Loading Pro Wave&hellip;</div>
+</body>
+</html>

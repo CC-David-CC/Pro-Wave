@@ -1000,6 +1000,8 @@ dependencies = [
  "block2 0.6.2",
  "coreaudio-rs",
  "dasp_sample",
+ "futures-channel",
+ "futures-util",
  "jni 0.22.4",
  "js-sys",
  "libc",
@@ -1015,6 +1017,8 @@ dependencies = [
  "objc2-core-audio-types",
  "objc2-core-foundation",
  "objc2-foundation 0.3.2",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
  "web-sys",
  "windows",
  "windows-core",
@@ -1592,6 +1596,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "futures-channel"
+version = "0.3.34"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1f9e3d69d39e4862ffed03ed071a76f9a13ba1d9109d355b0f0aa6b15e393c4"
+dependencies = [
+ "futures-core",
+]
+
+[[package]]
 name = "futures-core"
 version = "0.3.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1673,8 +1686,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ff2abc00be7fca6ebc474524697ae276ad847ad0a6b3faa4bcb027e9a4614ad0"
 dependencies = [
  "cfg-if",
+ "js-sys",
  "libc",
  "wasi",
+ "wasm-bindgen",
 ]
 
 [[package]]
@@ -1684,9 +1699,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "899def5c37c4fd7b2664648c28120ecec138e4d395b459e5ca34f9cce2dd77fd"
 dependencies = [
  "cfg-if",
+ "js-sys",
  "libc",
  "r-efi 5.3.0",
  "wasip2",
+ "wasm-bindgen",
 ]
 
 [[package]]
@@ -3430,8 +3447,10 @@ dependencies = [
  "eframe",
  "egui",
  "flate2",
+ "getrandom 0.3.4",
  "human-panic",
  "image",
+ "js-sys",
  "midir",
  "muda",
  "prowave-engine",
@@ -3443,6 +3462,7 @@ dependencies = [
  "prowave-logicx-import",
  "prowave-musicxml",
  "prowave-mxl",
+ "prowave-playground",
  "prowave-plugin-host",
  "prowave-project",
  "prowave-rex",
@@ -3450,7 +3470,9 @@ dependencies = [
  "prowave-vamp",
  "rfd",
  "rhai",
+ "ring",
  "rtrb",
+ "rustls-pki-types",
  "serde_json",
  "sha2",
  "sysinfo",
@@ -3459,6 +3481,10 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "ureq",
+ "uuid",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
  "winit",
  "winresource",
  "zip",
@@ -3479,6 +3505,7 @@ dependencies = [
  "assert_no_alloc",
  "cpal",
  "memmap2",
+ "prowave-playground",
  "rtrb",
  "rustysynth",
  "symphonia",
@@ -3550,6 +3577,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "prowave-playground"
+version = "0.1.0"
+dependencies = [
+ "symphonia-core",
+ "web-time",
+]
+
+[[package]]
 name = "prowave-plugin-host"
 version = "0.1.0"
 dependencies = [
@@ -3562,6 +3597,7 @@ dependencies = [
 name = "prowave-project"
 version = "0.1.0"
 dependencies = [
+ "prowave-playground",
  "serde",
  "serde_json",
  "tempfile",
@@ -3912,6 +3948,7 @@ version = "1.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2f4925028c7eb5d1fcdaf196971378ed9d2c1c4efc7dc5d011256f76c99c0a96"
 dependencies = [
+ "web-time",
  "zeroize",
 ]
 

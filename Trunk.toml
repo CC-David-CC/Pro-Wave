@@ -1,0 +1,9 @@
+# Pro Wave in the browser, for Playground (patches/logic-pro.yaml in github.com/daijro/openplayground).
+# Build with: trunk build --release   (from the repository's root)
+[build]
+target = "index.html"
+public_url = "./"
+filehash = false
+inject_scripts = false
+# Not dist/: that folder holds the desktop packages.
+dist = "target/trunk-dist"

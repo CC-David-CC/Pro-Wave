@@ -417,3 +417,6 @@ mod tests {
         assert_eq!(drums, ["Hits.caf"], "found by its category, not its name");
     }
 }
+
+// Playground's browser build: no folder dialog (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use crate::web::rfd;

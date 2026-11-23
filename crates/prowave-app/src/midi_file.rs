@@ -1514,3 +1514,6 @@ mod tests {
         assert_eq!(again.markers, parsed.markers);
     }
 }
+
+// Playground's browser build: the files (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;

@@ -2950,3 +2950,6 @@ mod stack_io_tests {
         assert_eq!(crate::engine_sync::route_of(&p, 0).output, 0);
     }
 }
+
+// Playground's browser build: the files, the temp folder and the process id (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;

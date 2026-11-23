@@ -784,3 +784,18 @@ pub(crate) fn buffer_text(bytes: &[u8]) -> String {
     let end = bytes.iter().position(|b| *b == 0).unwrap_or(bytes.len());
     String::from_utf8_lossy(&bytes[..end]).trim().to_string()
 }
+
+// Playground's browser build: no native libraries (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")]
+mod wasm_libloading {
+    pub struct Library;
+    pub struct Symbol<T>(core::convert::Infallible, core::marker::PhantomData<T>);
+    impl<T> core::ops::Deref for Symbol<T> {
+        type Target = T;
+        fn deref(&self) -> &T { match self.0 {} }
+    }
+    impl Library {
+        pub unsafe fn new<P>(_: P) -> Result<Library, String> { Err("no native libraries on the web".to_string()) }
+        pub unsafe fn get<T>(&self, _: &[u8]) -> Result<Symbol<T>, String> { Err("no native libraries on the web".to_string()) }
+    }
+}

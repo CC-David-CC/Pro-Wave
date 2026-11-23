@@ -320,3 +320,6 @@ mod tests {
         }
     }
 }
+
+// Playground's browser build: the clock (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;

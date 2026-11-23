@@ -1137,6 +1137,7 @@ extern "C" {
 /// # Safety
 /// `library` is a VST3 module that was just loaded from `path`.
 unsafe fn start_module(library: &libloading::Library, path: &Path) -> bool {
+    #[cfg(not(any(unix, windows)))] return { let _ = (library, path); false };
     #[cfg(target_os = "macos")]
     {
         use std::os::unix::ffi::OsStrExt;
@@ -1971,3 +1972,5 @@ impl Drop for Vst3Backend {
         }
     }
 }
+
+#[cfg(target_arch = "wasm32")] use crate::wasm_libloading as libloading;

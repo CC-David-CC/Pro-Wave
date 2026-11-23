@@ -753,6 +753,7 @@ const LOAD_WINDOW: Duration = Duration::from_millis(200);
 
 impl DiskThread {
     pub fn spawn() -> Self {
+        #[cfg(target_arch = "wasm32")] return web::spawn();
         let (tx, rx) = mpsc::channel::<Msg>();
         let load = Arc::new(DiskLoad::default());
         let thread_load = Arc::clone(&load);
@@ -1950,3 +1951,8 @@ mod tests {
         }
     }
 }
+
+// Playground's browser build: the files, and the streaming done in turns (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;
+#[cfg(target_arch = "wasm32")] mod web;
+#[cfg(target_arch = "wasm32")] pub(crate) use web::pump;

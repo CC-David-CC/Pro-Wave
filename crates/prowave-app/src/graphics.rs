@@ -102,6 +102,7 @@ fn pick(
 
 /// eframe's wgpu settings for Pro Wave (see the module docs).
 pub fn config() -> WgpuConfiguration {
+    #[cfg(target_arch = "wasm32")] return WgpuConfiguration::default();
     let mut setup = WgpuSetupCreateNew::without_display_handle();
     if wgpu::Backends::from_env().is_none() {
         let gl_works = !cfg!(target_os = "macos") && opengl_works();

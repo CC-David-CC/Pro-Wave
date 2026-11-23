@@ -1201,3 +1201,6 @@ mod tests {
         settle(&mut p, &mut s);
     }
 }
+
+// Playground's browser build: the files, the temp folder and the process id (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;

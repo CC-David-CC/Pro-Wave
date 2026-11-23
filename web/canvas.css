@@ -1,0 +1,4 @@
+html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #3a3a3c; }
+#prowave_canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#prowave_loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  color: #dcdcdc; font: 14px system-ui, sans-serif; pointer-events: none; }

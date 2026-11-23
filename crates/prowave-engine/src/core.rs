@@ -2121,6 +2121,7 @@ impl EngineCore {
 
     /// Render interleaved stereo (`out.len() == frames * 2`).
     pub fn process(&mut self, out: &mut [f32]) {
+        #[cfg(target_arch = "wasm32")] crate::disk::pump();
         flush_denormals();
         self.drain_commands();
         let frame_secs = 1.0 / self.sr as f64;

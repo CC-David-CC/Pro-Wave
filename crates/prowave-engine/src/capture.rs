@@ -1086,3 +1086,6 @@ mod tests {
         assert_eq!(plausible_latency(u64::from(u32::MAX)), 0);
     }
 }
+
+// Playground's browser build: the files, threads and clock (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;

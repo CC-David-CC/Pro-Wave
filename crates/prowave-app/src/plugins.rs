@@ -732,6 +732,10 @@ fn quarantine_file() -> PathBuf {
 /// Starts the background scan of the plug-in folders, once: later calls do nothing until a scan
 /// has finished.
 pub fn ensure_scanned() {
+    if cfg!(target_arch = "wasm32") {
+        state().catalog.scanned = true;
+        return;
+    }
     {
         let mut s = state();
         if s.catalog.scanned || s.catalog.scanning {
@@ -745,6 +749,10 @@ pub fn ensure_scanned() {
 /// Scans again (the Plug-in Manager's Rescan). With `retry_quarantined`, libraries that failed
 /// before are tried again.
 pub fn rescan(retry_quarantined: bool) {
+    if cfg!(target_arch = "wasm32") {
+        state().catalog.scanned = true;
+        return;
+    }
     {
         let mut s = state();
         if s.catalog.scanning {

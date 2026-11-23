@@ -706,6 +706,10 @@ fn scan_in_child(format: Format, path: &Path) -> Vec<PluginInfo> {
 /// the menus list its plug-ins at once. With `again`, every file is scanned anew (the Plug-in
 /// Manager's Rescan), and the catalog stays as it is until each file is done.
 pub fn scan(again: bool) {
+    if cfg!(target_arch = "wasm32") {
+        rack().scan = Scan::Done;
+        return;
+    }
     {
         let mut rack = rack();
         match rack.scan {

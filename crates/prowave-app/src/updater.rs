@@ -1024,6 +1024,7 @@ fn unix_now() -> u64 {
 
 /// Whether the program looks for updates by itself (Help > Check for Updates Automatically).
 pub fn auto_enabled() -> bool {
+    #[cfg(target_arch = "wasm32")] return false;
     config_file("updates-off").is_none_or(|f| !f.exists())
 }
 

@@ -97,6 +97,7 @@ pub fn reveal(path: &Path) -> std::io::Result<()> {
 /// The command that shows `path` in the file manager: Explorer selects the file, Finder
 /// reveals it and `xdg-open` opens the folder that holds it.
 fn reveal_command(path: &Path) -> std::process::Command {
+    #[cfg(target_arch = "wasm32")] return { let _ = path; std::process::Command::new("xdg-open") };
     #[cfg(target_os = "windows")]
     {
         let mut cmd = std::process::Command::new("explorer");
@@ -133,6 +134,10 @@ impl App {
     /// Runs a File menu command. New / Open / Open Recent first ask what to do with unsaved
     /// changes, and Revert asks before throwing them away.
     pub fn run_file_cmd(&mut self, cmd: FileCmd, ctx: &egui::Context) {
+        #[cfg(target_arch = "wasm32")]
+        if crate::web::workspace_save_pending() {
+            return;
+        }
         let discards = matches!(
             cmd,
             FileCmd::New
@@ -216,6 +221,11 @@ impl App {
             return;
         };
         self.ui.ask_save = None;
+        #[cfg(target_arch = "wasm32")]
+        if answer == Answer::Save && crate::web::workspace() {
+            crate::web::queue_workspace_save(self.path.clone(), false, Some(cmd));
+            return;
+        }
         let proceed = match answer {
             Answer::Save => self.save(),
             Answer::DontSave => true,
@@ -327,6 +337,11 @@ impl App {
 
     /// Save to the current file, or ask for one. Returns false if cancelled or failed.
     fn save(&mut self) -> bool {
+        #[cfg(target_arch = "wasm32")]
+        if crate::web::workspace() {
+            crate::web::queue_workspace_save(self.path.clone(), false, None);
+            return false;
+        }
         match self.path.clone() {
             Some(path) => self.save_to(&path),
             None => self.save_as(),
@@ -334,6 +349,11 @@ impl App {
     }
 
     fn save_as(&mut self) -> bool {
+        #[cfg(target_arch = "wasm32")]
+        if crate::web::workspace() {
+            crate::web::queue_workspace_save(None, false, None);
+            return false;
+        }
         let name = format!("{}.{}", self.project.name, prowave_project::EXTENSION);
         match dialog()
             .set_title(tr("Save As"))
@@ -347,6 +367,11 @@ impl App {
 
     /// Save A Copy As…: writes the project elsewhere and keeps working in the current file.
     fn save_copy(&mut self) -> bool {
+        #[cfg(target_arch = "wasm32")]
+        if crate::web::workspace() {
+            crate::web::queue_workspace_save(None, true, None);
+            return false;
+        }
         let name = format!("{} copy.{}", self.project.name, prowave_project::EXTENSION);
         match dialog()
             .set_title(tr("Save A Copy As"))
@@ -394,6 +419,8 @@ impl App {
 
     /// Swaps in a whole new project and resets editor state that indexes into the old one.
     fn replace(&mut self, mut p: Project, path: Option<PathBuf>) {
+        #[cfg(target_arch = "wasm32")]
+        crate::web::workspace_opened(path.as_deref());
         // A new song revision makes `EngineSync` rebuild and swap the engine's song.
         p.song_rev = self.project.song_rev.wrapping_add(1);
         self.project = p;
@@ -404,6 +431,37 @@ impl App {
         self.history.reset(&self.project);
         // A project is open now, so the Project Chooser has done its job.
         self.ui.chooser = None;
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    pub(crate) fn finish_workspace_save(
+        &mut self,
+        path: PathBuf,
+        mut saved: ProjectDoc,
+        copy: bool,
+        then: Option<FileCmd>,
+        ctx: &egui::Context,
+    ) {
+        if copy {
+            self.ui.status = Some(trf("saved a copy: {}", &[&path.display()]));
+            return;
+        }
+        self.ui.recent.add(&path);
+        if let Some(stem) = path.file_stem().and_then(|name| name.to_str()) {
+            self.project.name = stem.to_string();
+            saved.name = stem.to_string();
+        }
+        self.path = Some(path);
+        self.saved = saved;
+        self.ui.status = None;
+        if let Some(cmd) = then {
+            if content(&self.project) == self.saved {
+                self.do_file_cmd(cmd, ctx);
+            } else {
+                self.ui.recent_pick = None;
+                self.ui.status = Some("Saved an earlier revision. Later edits are still open.".to_string());
+            }
+        }
     }
 }
 
@@ -704,3 +762,6 @@ mod tests {
         assert_eq!(a.project.bar_len(0), 3.0);
     }
 }
+
+// Playground's browser build: Playground's file dialogs (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use crate::web::rfd;

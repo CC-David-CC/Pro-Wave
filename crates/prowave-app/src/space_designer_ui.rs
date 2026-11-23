@@ -2051,3 +2051,6 @@ mod tests {
         }
     }
 }
+
+// Playground's browser build: Playground's file dialogs (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use crate::web::rfd;

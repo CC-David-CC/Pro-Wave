@@ -42,3 +42,7 @@ features = [
     "Win32_System_Com",
     "Win32_System_Threading",
 ]
+
+[target.'cfg(all(target_arch = "wasm32"))'.dependencies]
+prowave-playground = { path = "../prowave-playground" }
+cpal = { version = "0.18.2", features = ["wasm-bindgen"] }

@@ -881,3 +881,6 @@ mod tests {
         assert!(back.iter().zip(&s).all(|(a, b)| (a - b).abs() < 1e-6));
     }
 }
+
+// Playground's browser build: the files (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;

@@ -322,3 +322,6 @@ mod tests {
         assert!((q.position_beats - 2.0 * 30.0 * 1001.0 / 30_000.0).abs() < 1e-9);
     }
 }
+
+// Playground's browser build: the clock (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;

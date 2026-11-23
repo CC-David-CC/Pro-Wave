@@ -11,7 +11,6 @@
 static ALLOC_GUARD: assert_no_alloc::AllocDisabler = assert_no_alloc::AllocDisabler;
 
 mod analysis;
-#[cfg(not(target_arch = "wasm32"))]
 mod capture;
 mod clock;
 mod convolver;
@@ -44,7 +43,6 @@ mod triple;
 mod wasapi;
 
 pub use crate::analysis::{tempo_curve, Analysis, Analyzer, TempoEstimate, STRENGTH_RATE};
-#[cfg(not(target_arch = "wasm32"))]
 pub use crate::capture::{
     input_devices, Capture, CaptureError, InputInfo, InputSource, Recorded, MAX_INPUT_CHANNELS,
 };

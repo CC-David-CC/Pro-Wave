@@ -162,3 +162,6 @@ mod tests {
         assert_eq!(r.paths().len(), 1);
     }
 }
+
+// Playground's browser build: settings in memory (patches/logic-pro.yaml).
+#[cfg(target_arch = "wasm32")] use prowave_playground::std;
