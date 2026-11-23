@@ -166,12 +166,13 @@ pub struct Web {
     pub app: App,
     unsaved: Option<bool>,
     last_revision: u64,
+    ready: bool,
 }
 
 impl Web {
     fn new(app: App) -> Self {
         let last_revision = app.project.song_rev;
-        Self { app, unsaved: None, last_revision }
+        Self { app, unsaved: None, last_revision, ready: false }
     }
 
     /// After the window's frame: files that came in, the dialogs it asked for, what it wrote, its unsaved state.
@@ -301,6 +302,10 @@ impl ::eframe::App for Web {
     fn ui(&mut self, ui: &mut egui::Ui, frame: &mut ::eframe::Frame) {
         ::eframe::App::ui(&mut self.app, ui, frame);
         self.after(&ui.ctx().clone());
+        if !self.ready {
+            self.ready = true;
+            call("ready", &[]);
+        }
     }
 
     fn as_any_mut(&mut self) -> Option<&mut dyn std::any::Any> {
@@ -346,10 +351,7 @@ fn start(creator: Creator<'_>) -> ::eframe::Result {
         let started = runner().start(canvas, ::eframe::WebOptions::default(), Box::new(creator)).await;
         if let Some(loading) = document.get_element_by_id("prowave_loading") {
             match started {
-                Ok(()) => {
-                    loading.remove();
-                    call("ready", &[]);
-                }
+                Ok(()) => loading.remove(),
                 Err(e) => {
                     let text = format!("Pro Wave could not start: {e:?}");
                     loading.set_text_content(Some(&text));

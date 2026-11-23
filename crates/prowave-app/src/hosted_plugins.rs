@@ -347,6 +347,9 @@ pub fn set_repaint(ctx: &egui::Context) {
 /// Once a frame, on the UI thread: the main-thread work the loaded plug-ins asked for, and now
 /// and then a copy of their state.
 pub fn idle() {
+    if cfg!(target_arch = "wasm32") {
+        return;
+    }
     static LAST_KEPT: Mutex<Option<std::time::Instant>> = Mutex::new(None);
     static LAST_RETRY: Mutex<Option<std::time::Instant>> = Mutex::new(None);
     if due(&LAST_RETRY, RETRY_EVERY) {
