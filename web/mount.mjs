@@ -104,7 +104,7 @@ export function mount(host) {
       if (sha256) {
         loadedRevisions.set(source, sha256);
         bind(source, sha256, 'Opened');
-      } else bind(null);
+      } else bind(null, null);
     },
     saveAs({name}) {
       return run(async () => {
